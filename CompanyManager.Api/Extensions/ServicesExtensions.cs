@@ -5,7 +5,7 @@ using CompanyManager.Services;
 using CompanyManager.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace CompanyManager.Api;
+namespace CompanyManager.Api.Extensions;
 
 public static class ServicesExtensions
 {

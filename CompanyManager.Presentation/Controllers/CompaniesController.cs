@@ -1,4 +1,3 @@
-using CompanyManager.Presentation.Mappers;
 using CompanyManager.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,16 +17,17 @@ public class CompaniesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCompanies()
     {
-        try
-        {
-            var companies =
-                await _service.CompanyService.GetAllCompanies(trackChanges: false);
+        var companies =
+            await _service.CompanyService.GetAllCompanies(trackChanges: false);
 
-            return Ok(companies.Select(CompanyMapper.ToDto));
-        }
-        catch
-        {
-            return StatusCode(500, "Internal server error");
-        }
+        return Ok(companies);
+    }
+
+    [HttpGet("id")]
+    public async Task<IActionResult> GetOne(int id)
+    {
+        var company = await _service.CompanyService.GetOne(id, trackChanges: false);
+        
+        return Ok(company);
     }
 }

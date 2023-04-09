@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace CompanyManager.Shared.DataTransferObjects;
 
+[Serializable]
 public class CompanyDto
 {
     public int Id { get; set; }

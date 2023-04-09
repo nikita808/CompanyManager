@@ -1,5 +1,6 @@
 namespace CompanyManager.Shared.DataTransferObjects;
 
+[Serializable]
 public class EmployeeDto
 {
     public int Id { get; set; }

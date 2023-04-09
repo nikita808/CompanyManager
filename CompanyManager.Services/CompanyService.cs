@@ -1,7 +1,10 @@
 using CompanyManager.Contracts;
 using CompanyManager.Entities;
+using CompanyManager.Entities.Exceptions;
 using CompanyManager.LoggerService;
 using CompanyManager.Services.Contracts;
+using CompanyManager.Services.Mappers;
+using CompanyManager.Shared.DataTransferObjects;
 
 namespace CompanyManager.Services;
 
@@ -18,18 +21,30 @@ internal sealed class CompanyService : ICompanyService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<Company>> GetAllCompanies(bool trackChanges)
+    public async Task<IEnumerable<CompanyDto>> GetAllCompanies(bool trackChanges)
     {
-        try
+        var companies =
+            await _repository.Company.GetAllCompanies(trackChanges);
+
+        var enumerable = companies as Company[] ?? companies.ToArray();
+
+        if (!enumerable.Any())
         {
-            var companies =
-                await _repository.Company.GetAllCompanies(trackChanges);
-            return companies;
+            return Array.Empty<CompanyDto>();
         }
-        catch (Exception ex)
+
+        return enumerable.Select(CompanyMapper.ToDto)!;
+    }
+
+    public async Task<CompanyDto> GetOne(int id, bool trackChanges)
+    {
+        var company = await _repository.Company.GetOne(id, trackChanges);
+
+        if (company is null)
         {
-            _logger.LogError($"Something went wrong in the {nameof(GetAllCompanies)} service method {ex}");
-            throw;
+            throw new CompanyNotFoundException(id);
         }
+
+        return CompanyMapper.ToDto(company);
     }
 }

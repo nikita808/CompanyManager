@@ -18,4 +18,12 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
 
         return companies;
     }
+
+    public async Task<Company?> GetOne(int id, bool trackChanges)
+    {
+        var company =
+            await FindByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
+
+        return company;
+    }
 }

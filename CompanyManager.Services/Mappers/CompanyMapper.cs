@@ -1,7 +1,7 @@
 using CompanyManager.Entities;
 using CompanyManager.Shared.DataTransferObjects;
 
-namespace CompanyManager.Presentation.Mappers;
+namespace CompanyManager.Services.Mappers;
 
 public static class CompanyMapper
 {
