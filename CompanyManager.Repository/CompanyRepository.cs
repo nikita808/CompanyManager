@@ -10,7 +10,7 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
     {
     }
 
-    public async Task<IEnumerable<Company>> GetAllCompanies(bool trackChanges)
+    public async Task<IEnumerable<Company>> GetAllCompaniesAsync(bool trackChanges)
     {
         var companies = await FindAll(trackChanges)
             .OrderBy(c => c.Name)
@@ -19,11 +19,16 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
         return companies;
     }
 
-    public async Task<Company?> GetOne(int id, bool trackChanges)
+    public async Task<Company?> GetOneAsync(int id, bool trackChanges)
     {
         var company =
             await FindByCondition(c => c.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
 
         return company;
+    }
+
+    public async Task AddOneAsync(Company company)
+    {
+        await Create(company);
     }
 }

@@ -23,6 +23,9 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
     "/nlog.config"));
 
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -38,6 +41,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

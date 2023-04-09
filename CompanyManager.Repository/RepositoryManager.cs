@@ -19,9 +19,9 @@ public sealed class RepositoryManager : IRepositoryManager
             EmployeeRepository(context));
     }
 
-    public ICompanyRepository Company => _companyRepository.Value;
+    public ICompanyRepository Companies => _companyRepository.Value;
     
-    public IEmployeeRepository Employee => _employeeRepository.Value;
+    public IEmployeeRepository Employees => _employeeRepository.Value;
 
     public async Task SaveAsync()
     {

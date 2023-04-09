@@ -12,6 +12,8 @@ public interface IRepositoryBase<T> where T : class
 
     ValueTask<EntityEntry<T>> Create(T entity);
 
+    Task AddRange(IEnumerable<T> array);
+
     void Update(T entity);
 
     void Delete(T entity);

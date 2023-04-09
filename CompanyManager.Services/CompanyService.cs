@@ -24,7 +24,7 @@ internal sealed class CompanyService : ICompanyService
     public async Task<IEnumerable<CompanyDto>> GetAllCompanies(bool trackChanges)
     {
         var companies =
-            await _repository.Company.GetAllCompanies(trackChanges);
+            await _repository.Companies.GetAllCompaniesAsync(trackChanges);
 
         var enumerable = companies as Company[] ?? companies.ToArray();
 
@@ -38,7 +38,7 @@ internal sealed class CompanyService : ICompanyService
 
     public async Task<CompanyDto> GetOne(int id, bool trackChanges)
     {
-        var company = await _repository.Company.GetOne(id, trackChanges);
+        var company = await _repository.Companies.GetOneAsync(id, trackChanges);
 
         if (company is null)
         {
@@ -46,5 +46,18 @@ internal sealed class CompanyService : ICompanyService
         }
 
         return CompanyMapper.ToDto(company);
+    }
+
+    public async Task CreateOne(CompanyDto companyDto)
+    {
+        var entity = new Company
+        {
+            Name = companyDto.Name,
+            Address = companyDto.Address,
+            Country = companyDto.Country
+        };
+        await _repository.Companies.AddOneAsync(entity);
+
+        await _repository.SaveAsync();
     }
 }

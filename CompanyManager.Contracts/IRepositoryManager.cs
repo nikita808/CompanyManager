@@ -2,9 +2,9 @@ namespace CompanyManager.Contracts;
 
 public interface IRepositoryManager
 {
-    ICompanyRepository Company { get; }
+    ICompanyRepository Companies { get; }
 
-    IEmployeeRepository Employee { get; }
+    IEmployeeRepository Employees { get; }
 
     Task SaveAsync();
 }

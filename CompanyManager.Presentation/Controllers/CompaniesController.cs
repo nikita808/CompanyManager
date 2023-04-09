@@ -1,4 +1,5 @@
 using CompanyManager.Services.Contracts;
+using CompanyManager.Shared.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyManager.Presentation.Controllers;
@@ -27,7 +28,16 @@ public class CompaniesController : ControllerBase
     public async Task<IActionResult> GetOne(int id)
     {
         var company = await _service.CompanyService.GetOne(id, trackChanges: false);
-        
+
         return Ok(company);
+    }
+
+    [HttpPost]
+    public IActionResult CreateCompany([FromBody] CompanyDto company)
+    {
+        var createdCompany = _service.CompanyService.CreateOne(company);
+
+        return CreatedAtRoute("CompanyById", new { id = createdCompany.Id },
+            company);
     }
 }

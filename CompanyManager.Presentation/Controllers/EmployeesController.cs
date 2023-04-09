@@ -1,4 +1,6 @@
+using System.Text.Json;
 using CompanyManager.Services.Contracts;
+using CompanyManager.Shared.RequestFeatures;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyManager.Presentation.Controllers;
@@ -15,12 +17,19 @@ public class EmployeesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEmployeesForCompany(int companyId)
+    public async Task<IActionResult> GetEmployeesForCompany(int companyId,
+        [FromQuery] EmployeeParameters employeeParameters)
     {
-        var employees = await _service.EmployeeService.GetAllEmployees(companyId, trackChanges:
-            false);
+        var pagedResult = await _service
+            .EmployeeService
+            .GetAllEmployees(companyId, employeeParameters, trackChanges:
+                false);
 
-        return Ok(employees);
+        Response.Headers.Add("X-Pagination",
+            JsonSerializer.Serialize(pagedResult.metaData));
+
+
+        return Ok(pagedResult.employees);
     }
 
     [HttpGet("{id:int}")]

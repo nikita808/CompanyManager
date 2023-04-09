@@ -7,31 +7,33 @@ namespace CompanyManager.Repository;
 
 public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    protected readonly DatabaseContext DatabaseContext;
+    private readonly DatabaseContext _databaseContext;
 
     protected RepositoryBase(DatabaseContext databaseContext)
     {
-        DatabaseContext = databaseContext;
+        _databaseContext = databaseContext;
     }
 
     public IQueryable<T> FindAll(bool trackChanges) =>
         !trackChanges
-            ? DatabaseContext.Set<T>()
+            ? _databaseContext.Set<T>()
                 .AsNoTracking()
-            : DatabaseContext.Set<T>();
+            : _databaseContext.Set<T>();
 
     public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression,
         bool trackChanges) =>
         !trackChanges
-            ? DatabaseContext.Set<T>()
+            ? _databaseContext.Set<T>()
                 .Where(expression)
                 .AsNoTracking()
-            : DatabaseContext.Set<T>()
+            : _databaseContext.Set<T>()
                 .Where(expression);
 
-    public ValueTask<EntityEntry<T>> Create(T entity) => DatabaseContext.Set<T>().AddAsync(entity);
+    public ValueTask<EntityEntry<T>> Create(T entity) => _databaseContext.Set<T>().AddAsync(entity);
 
-    public void Update(T entity) => DatabaseContext.Set<T>().Update(entity);
+    public Task AddRange(IEnumerable<T> array) => _databaseContext.Set<T>().AddRangeAsync(array);
 
-    public void Delete(T entity) => DatabaseContext.Set<T>().Remove(entity);
+    public void Update(T entity) => _databaseContext.Set<T>().Update(entity);
+
+    public void Delete(T entity) => _databaseContext.Set<T>().Remove(entity);
 }

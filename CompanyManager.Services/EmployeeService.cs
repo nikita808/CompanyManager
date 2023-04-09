@@ -5,6 +5,7 @@ using CompanyManager.LoggerService;
 using CompanyManager.Services.Contracts;
 using CompanyManager.Services.Mappers;
 using CompanyManager.Shared.DataTransferObjects;
+using CompanyManager.Shared.RequestFeatures;
 
 namespace CompanyManager.Services;
 
@@ -20,28 +21,28 @@ internal sealed class EmployeeService : IEmployeeService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<EmployeeDto>> GetAllEmployees(int companyId, bool trackChanges)
+    public async Task<(IEnumerable<EmployeeDto> employees, Metadata metaData)> GetAllEmployees(int companyId,
+        EmployeeParameters employeeParameters,
+        bool trackChanges)
     {
-        var company = _repository.Company.GetOne(companyId, trackChanges);
+        if (!employeeParameters.ValidAgeRange)
+            throw new MaxAgeRangeBadRequestException();
+
+        var company = _repository.Companies.GetOneAsync(companyId, trackChanges);
 
         if (company is null)
             throw new CompanyNotFoundException(companyId);
 
-        var employeesEntities = await _repository.Employee.GetEmployees(companyId, false);
+        var employeesWithMetadata = await _repository
+            .Employees
+            .GetEmployeesAsync(companyId, employeeParameters, false);
 
-        var enumerable = employeesEntities as Employee[] ?? employeesEntities.ToArray();
-
-        if (!enumerable.Any())
-        {
-            return Array.Empty<EmployeeDto>();
-        }
-
-        return enumerable.Select(EmployeeMapper.ToDto);
+        return (employeesWithMetadata.Select(EmployeeMapper.ToDto), employeesWithMetadata.Metadata);
     }
 
     public async Task<EmployeeDto> GetOne(int id, bool trackChanges)
     {
-        var employee = await _repository.Employee.GetOne(id, trackChanges);
+        var employee = await _repository.Employees.GetOneAsync(id, trackChanges);
 
         return EmployeeMapper.ToDto(employee);
     }
