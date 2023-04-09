@@ -5,7 +5,7 @@ namespace CompanyManager.Entities;
 
 public class Employee
 {
-    [Column("EmployeeId")] public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [Required(ErrorMessage = "Employee name is a required field.")]
     [MaxLength(30, ErrorMessage = "Maximum length for the Name is 30 characters.")]
@@ -20,4 +20,5 @@ public class Employee
 
     [ForeignKey(nameof(Company))] public int CompanyId { get; set; }
     public Company? Company { get; set; }
+    
 }

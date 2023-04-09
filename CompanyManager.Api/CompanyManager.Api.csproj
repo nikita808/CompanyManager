@@ -17,7 +17,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CompanyManager.LoggerService\CompanyManager.LoggerService.csproj" />
+      <ProjectReference Include="..\CompanyManager.Presentation\CompanyManager.Presentation.csproj" />
       <ProjectReference Include="..\CompanyManager.Repository\CompanyManager.Repository.csproj" />
+      <ProjectReference Include="..\CompanyManager.Services.Contracts\CompanyManager.Services.Contracts.csproj" />
+      <ProjectReference Include="..\CompanyManager.Services\CompanyManager.Services.csproj" />
     </ItemGroup>
 
 </Project>
