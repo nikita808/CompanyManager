@@ -1,5 +1,5 @@
-using CompanyManager.Entities.Responses;
 using CompanyManager.Helpers;
+using CompanyManager.Shared.DataTransferObjects.Responses;
 
 namespace CompanyManager.Clients;
 

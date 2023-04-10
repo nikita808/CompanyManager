@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Text.Json.Serialization;
 
-namespace CompanyManager.Entities.Responses;
+namespace CompanyManager.Shared.DataTransferObjects.Responses;
 
 // Root myDeserializedClass = JsonSerializer.Deserialize<List<Root>>(myJsonResponse);
 public class Address
@@ -33,7 +32,7 @@ public class Geo
     [JsonPropertyName("lng")] public string Lng { get; set; }
 }
 
-public class User
+public class User : BaseMockResponse
 {
     [JsonPropertyName("id")] public int Id { get; set; }
 
@@ -50,9 +49,4 @@ public class User
     [JsonPropertyName("website")] public string Website { get; set; }
 
     [JsonPropertyName("company")] public Company Company { get; set; }
-}
-
-public class UsersResponse
-{
-    public List<User> Users { get; set; }
 }
