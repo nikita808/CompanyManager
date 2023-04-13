@@ -10,7 +10,7 @@ public interface IRepositoryBase<T> where T : class
     IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression,
         bool trackChanges);
 
-    ValueTask<EntityEntry<T>> Create(T entity);
+    ValueTask<EntityEntry<T>> CreateAsync(T entity);
 
     Task AddRange(IEnumerable<T> array);
 

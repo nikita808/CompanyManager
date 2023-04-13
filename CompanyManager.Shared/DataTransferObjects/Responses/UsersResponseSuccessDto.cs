@@ -32,7 +32,7 @@ public class Geo
     [JsonPropertyName("lng")] public string Lng { get; set; }
 }
 
-public class User : BaseMockResponse
+public class UserDto : BaseMockResponse
 {
     [JsonPropertyName("id")] public int Id { get; set; }
 

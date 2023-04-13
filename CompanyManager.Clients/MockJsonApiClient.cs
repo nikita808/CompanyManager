@@ -1,26 +1,24 @@
 using CompanyManager.Helpers;
 using CompanyManager.Shared.DataTransferObjects.Responses;
+using CompanyManager.Shared.HttpClients;
 
 namespace CompanyManager.Clients;
 
 public class MockJsonApiClient
 {
-    private readonly HttpClient _httpClient;
+    private readonly MockHttpClient _mock;
 
-    public MockJsonApiClient()
+    public MockJsonApiClient(MockHttpClient mock)
     {
-        _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri("https://jsonplaceholder.typicode.com")
-        };
+        _mock = mock;
     }
 
-    public async Task<List<User>> GetUsers()
+    public async Task<List<UserDto>> GetUsers()
     {
-        var response = await _httpClient.GetAsync("/users");
+        var response = await _mock.Client.GetAsync("/users");
 
         var result =
-            await Deserializer<List<User>>.Deserialize(response);
+            await Deserializer<List<UserDto>>.Deserialize(response);
 
         return result;
     }

@@ -29,7 +29,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
             : _databaseContext.Set<T>()
                 .Where(expression);
 
-    public ValueTask<EntityEntry<T>> Create(T entity) => _databaseContext.Set<T>().AddAsync(entity);
+    public ValueTask<EntityEntry<T>> CreateAsync(T entity) => _databaseContext.Set<T>().AddAsync(entity);
 
     public Task AddRange(IEnumerable<T> array) => _databaseContext.Set<T>().AddRangeAsync(array);
 

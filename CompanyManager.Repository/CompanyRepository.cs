@@ -29,6 +29,6 @@ public class CompanyRepository : RepositoryBase<Company>, ICompanyRepository
 
     public async Task AddOneAsync(Company company)
     {
-        await Create(company);
+        await CreateAsync(company);
     }
 }

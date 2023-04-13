@@ -4,6 +4,7 @@ using CompanyManager.LoggerService;
 using CompanyManager.Repository;
 using CompanyManager.Services;
 using CompanyManager.Services.Contracts;
+using CompanyManager.Shared.HttpClients;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,5 +39,10 @@ public static class ServicesExtensions
             })
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
+    }
+
+    public static void ConfigureHttpClients(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddHttpClient<MockHttpClient>();
     }
 }
