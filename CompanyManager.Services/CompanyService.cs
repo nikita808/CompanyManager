@@ -8,7 +8,7 @@ using CompanyManager.Shared.DataTransferObjects;
 
 namespace CompanyManager.Services;
 
-internal sealed class CompanyService : ICompanyService
+public sealed class CompanyService : ICompanyService
 {
     private readonly IRepositoryManager _repository;
 

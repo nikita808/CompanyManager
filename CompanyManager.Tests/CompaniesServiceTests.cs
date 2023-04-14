@@ -1,4 +1,9 @@
+using CompanyManager.Contracts;
+using CompanyManager.Entities;
+using CompanyManager.LoggerService;
+using CompanyManager.Services;
 using CompanyManager.Services.Contracts;
+using CompanyManager.Services.Mappers;
 using CompanyManager.Shared.DataTransferObjects;
 using Moq;
 
@@ -7,24 +12,34 @@ namespace CompanyManager.Tests;
 [TestFixture]
 public class CompaniesServiceTests
 {
-    private Mock<ICompanyService> _mockService = null!;
+    private ICompanyService _service = null!;
+    private Mock<IRepositoryManager> _mockRepository = null!;
+    private Mock<ILoggerManager> _mockLogger = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _mockService = new Mock<ICompanyService>();
+        _mockRepository = new Mock<IRepositoryManager>();
+        _mockLogger = new Mock<ILoggerManager>();
+        _service = new CompanyService(_mockRepository.Object, _mockLogger.Object);
     }
 
     [Test]
-    public async Task GetAllCompanies_Returns_Correct_Number()
+    public async Task GetAllCompanies_Returns_Correct_Type()
     {
-        var list = new List<CompanyDto> { new(), new() };
+        var companyToCreate = new Company { Name = "Test Company", Address = "123 Test St.", Country = "Testland" };
 
-        var task = Task.FromResult(list);
+        _mockRepository
+            .Setup(r => r.Companies.AddOneAsync(companyToCreate)).Returns(Task.CompletedTask);
 
-        _mockService.Setup(s => s.GetAllCompanies(false))
-            .ReturnsAsync(await task);
+        _mockRepository.Setup(r => r.SaveAsync()).Returns(Task.CompletedTask);
 
-        Assert.That(list, Has.Count.EqualTo(2));
+        _mockRepository
+            .Setup(r => r.Companies.GetAllCompaniesAsync(false)).ReturnsAsync(new List<Company>());
+
+
+        await _service.CreateOne(CompanyMapper.ToDto(companyToCreate));
+
+        _mockRepository.VerifyAll();
     }
 }
